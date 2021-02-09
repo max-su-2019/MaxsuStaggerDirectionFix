@@ -1,0 +1,2 @@
+# MaxsuStaggerDirectionFix
+ A SKSE Plugin
