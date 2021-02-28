@@ -2,7 +2,7 @@
 
 namespace SDFix
 {
-	bool ResetStaggerDireHook::SetGraphVarFloat(RE::BShkbAnimationGraph* Graph, RE::BSFixedString Var_name, float staggerDire)
+	bool ResetStaggerDireHook::SetGraphVarFloat(RE::BShkbAnimationGraph* Graph, const RE::BSFixedString& Var_name, float staggerDire)
 	{
 		static const std::string StaggerDireName = "staggerDirection";
 		static const std::string ModifiedDireName = "Maxsu_modifiedStaggerDirection";
@@ -10,7 +10,7 @@ namespace SDFix
 		if (Var_name.c_str() == StaggerDireName && staggerDire == 0.f) {
 			logger::debug("Reset stagger Direction Float Hook Trigger!");
 
-			if (Graph->fadeNode && Graph->fadeNode->userData) {
+			if (Graph && Graph->fadeNode && Graph->fadeNode->userData) {
 				auto target = Graph->fadeNode->userData;
 
 				float ModifiedDire;
@@ -26,7 +26,7 @@ namespace SDFix
 			} else
 				logger::debug(FMT_STRING("Can not find a Target Ref!"));
 		}
-
+		
 		return _SetGraphVarFloat(Graph, Var_name, staggerDire);
 	}
 }

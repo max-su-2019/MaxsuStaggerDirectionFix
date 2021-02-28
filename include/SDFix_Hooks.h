@@ -16,7 +16,7 @@ namespace SDFix
 
 
 	private:
-		static bool SetGraphVarFloat(RE::BShkbAnimationGraph* Graph, RE::BSFixedString Var_name, float staggerDire);
+		static bool SetGraphVarFloat(RE::BShkbAnimationGraph* Graph, const RE::BSFixedString& Var_name, float staggerDire);
 
 
 		static inline REL::Relocation<decltype(SetGraphVarFloat)> _SetGraphVarFloat;

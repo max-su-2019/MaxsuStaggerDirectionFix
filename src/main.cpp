@@ -2,7 +2,7 @@
 #include "SDFix_Hooks.h"
 #include "version.h"
 
-#define DEBUG_MES 1
+//#define DEBUG_MES 1
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
