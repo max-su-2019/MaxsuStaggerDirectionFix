@@ -93,15 +93,15 @@ namespace SDFix
 			logger::debug(FMT_STRING("Caster Name is \"{}\", ID is \"{:x}\""), hit_causer->GetName(), hit_causer->GetFormID());
 			logger::debug(FMT_STRING("Hit Target Name is \"{}\", ID is \"{:x}\""), hit_target->GetName(), hit_target->GetFormID());
 
-			if (hit_causer->GetFormID() == hit_target->GetFormID()) {
-				logger::debug("Effect Is Self Deliverey!");
-				return EventResult::kContinue;
-			}
-
 			static const std::string ModifiedDireName = "Maxsu_modifiedStaggerDirection";
 
 			auto headingAng = hit_target->GetHeadingAngle(hit_causer->GetPosition(), false);
 			auto staggerDire = headingAng >= 0.f ? headingAng / 360.f : (360.f + headingAng) / 360.f;  //Convert the heading angle value to "staggerDirection" graph variable float
+
+			if (hit_causer->GetFormID() == hit_target->GetFormID()) {
+				logger::debug("Effect Is Self Deliverey!");
+				staggerDire = 0.f;		//Set Direction to 0 when self casting
+			}
 
 			if (hit_target->As<RE::Actor>()->SetGraphVariableFloat(ModifiedDireName, staggerDire))
 				logger::debug("Store Stagger Direction Value Successfully!");
