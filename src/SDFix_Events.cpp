@@ -71,10 +71,17 @@ namespace SDFix
 		}
 
 
-		if (!hit_target->HasGraphVariableFloat("staggerDirection")) {
-			logger::debug("Hit Target Has Not staggerDirection!");
-			return EventResult::kContinue;
+		RE::BSTSmartPointer<RE::BSAnimationGraphManager> animationGraphManagerPtr;
+		if (hit_target->GetAnimationGraphManager(animationGraphManagerPtr)) {
+			RE::BShkbAnimationGraph* animationGraph = animationGraphManagerPtr->graphs[animationGraphManagerPtr->activeGraph].get();
+
+			float out;
+			if (!animationGraph->GetGraphVariableFloat("staggerDirection", out)) {
+				logger::debug("Hit Target Has No staggerDirection!");
+				return EventResult::kContinue;
+			}
 		}
+
 
 		//-------------------------------------------------------------------------------------
 

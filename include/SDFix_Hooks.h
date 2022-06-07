@@ -9,9 +9,10 @@ namespace SDFix
 		{
 			SKSE::AllocTrampoline(1 << 4);
 
-			REL::Relocation<std::uintptr_t> setGraphVarFloatBase{ REL::ID(32184) };
+			REL::Relocation<std::uintptr_t> setGraphVarFloatBase{ REL::VariantID(32184, 32933, 32184) };
+
 			auto& trampoline = SKSE::GetTrampoline();
-			_SetGraphVarFloat = trampoline.write_call<5>(setGraphVarFloatBase.address() + 0xA5, SetGraphVarFloat);
+			_SetGraphVarFloat = trampoline.write_call<5>(setGraphVarFloatBase.address() + REL::Relocate(0xA5, 0xC5, 0xA5), SetGraphVarFloat);
 		}
 
 
