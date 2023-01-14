@@ -1,6 +1,5 @@
 #include "SDFix_Events.h"
 
-
 namespace SDFix
 {
 	bool EffectStartEventHandler::RegisterEffectStartEvent()
@@ -20,7 +19,6 @@ namespace SDFix
 
 		return true;
 	}
-
 
 	EventResult EffectStartEventHandler::ProcessEvent(const RE::TESMagicEffectApplyEvent* a_event, RE::BSTEventSource<RE::TESMagicEffectApplyEvent>* a_eventSource)
 	{
@@ -44,7 +42,6 @@ namespace SDFix
 		}
 		//-------------------------------------------------------------------------------------
 
-
 		//----------------------Check Hit Target-----------------------------------------------
 
 		auto hit_target = a_event->target.get();
@@ -59,7 +56,6 @@ namespace SDFix
 			return EventResult::kContinue;
 		}
 
-
 		if (hit_target->formType != RE::FormType::ActorCharacter) {
 			logger::debug("Hit Target Not Actor!");
 			return EventResult::kContinue;
@@ -70,10 +66,9 @@ namespace SDFix
 			return EventResult::kContinue;
 		}
 
-
 		RE::BSTSmartPointer<RE::BSAnimationGraphManager> animationGraphManagerPtr;
 		if (hit_target->GetAnimationGraphManager(animationGraphManagerPtr)) {
-			RE::BShkbAnimationGraph* animationGraph = animationGraphManagerPtr->graphs[animationGraphManagerPtr->activeGraph].get();
+			RE::BShkbAnimationGraph* animationGraph = animationGraphManagerPtr->graphs[animationGraphManagerPtr->GetRuntimeData().activeGraph].get();
 
 			float out;
 			if (!animationGraph->GetGraphVariableFloat("staggerDirection", out)) {
@@ -82,9 +77,7 @@ namespace SDFix
 			}
 		}
 
-
 		//-------------------------------------------------------------------------------------
-
 
 		//----------------------Check Magic Effect-----------------------------------------------
 
@@ -119,8 +112,4 @@ namespace SDFix
 
 		return EventResult::kContinue;
 	}
-
-
-
-
 }
