@@ -10,11 +10,10 @@
 #	define SKSEPlugin_Query F4SEPlugin_Query
 #	define RUNTIME RUNTIME_1_10_163
 #else
+#undef ENABLE_SKYRIM_VR
 #	include "RE/Skyrim.h"
 #	include "SKSE/SKSE.h"
 #endif
-
-#include <Windows.h>
 
 #ifdef NDEBUG
 #	include <spdlog/sinks/basic_file_sink.h>
@@ -23,6 +22,9 @@
 #endif
 
 #pragma warning(pop)
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 using namespace std::literals;
 
@@ -34,7 +36,6 @@ namespace stl
 	void write_thunk_call(std::uintptr_t a_src)
 	{
 		SKSE::AllocTrampoline(14);
-
 		auto& trampoline = SKSE::GetTrampoline();
 		T::func = trampoline.write_call<5>(a_src, T::thunk);
 	}
@@ -47,7 +48,7 @@ namespace stl
 	}
 
 	template <std::size_t idx, class T>
-	void write_vfunc(REL::ID id)
+	void write_vfunc(REL::VariantID id)
 	{
 		REL::Relocation<std::uintptr_t> vtbl{ id };
 		T::func = vtbl.write_vfunc(idx, T::thunk);
@@ -55,6 +56,7 @@ namespace stl
 }
 
 namespace logger = SKSE::log;
+namespace WinAPI = SKSE::WinAPI;
 
 namespace util
 {
@@ -77,7 +79,7 @@ void InitializeLog()
 		util::report_and_fail("Failed to find standard logging directory"sv);
 	}
 
-	*path /= fmt::format("{}.log"sv, Plugin::NAME);
+	*path /= std::format("{}.log"sv, Plugin::NAME);
 	auto       sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 
@@ -89,16 +91,16 @@ void InitializeLog()
 
 	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
 	log->set_level(level);
-	log->flush_on(level);
+	log->flush_on(spdlog::level::info);
 
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("[%l] %v"s);
 }
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
+extern "C" DLLEXPORT  bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface * a_skse)
 {
 #ifndef NDEBUG
-	while (!IsDebuggerPresent()) {};
+	while (!WinAPI::IsDebuggerPresent()) {};
 #endif
 	InitializeLog();
 	logger::info("Loaded plugin");
@@ -107,7 +109,7 @@ EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Load(con
 	return true;
 }
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) constinit auto SKSEPlugin_Version = []() noexcept {
+extern "C" DLLEXPORT  constinit auto SKSEPlugin_Version = []() noexcept {
 	SKSE::PluginVersionData v;
 	v.PluginName(Plugin::NAME.data());
 	v.PluginVersion(Plugin::VERSION);
@@ -116,7 +118,7 @@ EXTERN_C [[maybe_unused]] __declspec(dllexport) constinit auto SKSEPlugin_Versio
 	return v;
 }();
 
-EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* pluginInfo)
+extern "C" DLLEXPORT  bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo * pluginInfo)
 {
 	pluginInfo->name = SKSEPlugin_Version.pluginName;
 	pluginInfo->infoVersion = SKSE::PluginInfo::kVersion;

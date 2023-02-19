@@ -47,8 +47,6 @@ target_sources(
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/Plugin.h
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/version.rc
-		.clang-format
-		.editorconfig
 )
 
 target_precompile_headers(
@@ -122,3 +120,19 @@ else()
 endif()
 
 find_package(spdlog CONFIG REQUIRED)
+
+target_include_directories(
+	${PROJECT_NAME} 
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+	PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR}/cmake
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+
+target_link_libraries(
+	${PROJECT_NAME} 
+	PUBLIC 
+		CommonLibSSE::CommonLibSSE
+)

@@ -3,23 +3,13 @@
         {
             "kind": "git",
             "repository": "https://gitlab.com/colorglass/vcpkg-colorglass",
-            "baseline": "ef8d43afe4d26e842de3d034bff1081cb7990f07",
+            "baseline": "eb2f2bd143b8f7c52b57ef5a822163b56f7be7d6",
             "packages": [
-                "articuno",
-                "bethesda-skyrim-scripts",
-                "commonlibsse",
                 "commonlibsse-ng",
                 "commonlibsse-ng-ae",
-                "commonlibsse-ng-flatrim",
-                "commonlibsse-ng-prebuilt",
                 "commonlibsse-ng-se",
                 "commonlibsse-ng-vr",
-                "commonlibsse-po3-ae",
-                "commonlibsse-po3-se",
-                "commonlibvr",
-                "gluino",
-                "script-extender-common",
-                "skse"
+                "commonlibsse-ng-flatrim"
             ]
         }
     ]

@@ -90,8 +90,8 @@ namespace SDFix
 
 		if (this_effect->GetArchetype() == RE::EffectArchetypes::ArchetypeID::kStagger) {
 			logger::debug("Effect Is Stagger!");
-			logger::debug(FMT_STRING("Caster Name is \"{}\", ID is \"{:x}\""), hit_causer->GetName(), hit_causer->GetFormID());
-			logger::debug(FMT_STRING("Hit Target Name is \"{}\", ID is \"{:x}\""), hit_target->GetName(), hit_target->GetFormID());
+			logger::debug("Caster Name is \"{}\", ID is \"{:x}\"", hit_causer->GetName(), hit_causer->GetFormID());
+			logger::debug("Hit Target Name is \"{}\", ID is \"{:x}\"", hit_target->GetName(), hit_target->GetFormID());
 
 			static const std::string ModifiedDireName = "Maxsu_modifiedStaggerDirection";
 
