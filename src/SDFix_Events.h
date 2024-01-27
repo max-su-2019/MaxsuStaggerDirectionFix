@@ -4,14 +4,12 @@ namespace SDFix
 {
 	using EventResult = RE::BSEventNotifyControl;
 
-
 	class EffectStartEventHandler : public RE::BSTEventSink<RE::TESMagicEffectApplyEvent>
 	{
 	public:
 		virtual EventResult ProcessEvent(const RE::TESMagicEffectApplyEvent* a_event, RE::BSTEventSource<RE::TESMagicEffectApplyEvent>* a_eventSource);
 
 		static bool RegisterEffectStartEvent();
-
 
 	private:
 		EffectStartEventHandler() = default;
@@ -26,7 +24,4 @@ namespace SDFix
 
 		EffectStartEventHandler& operator=(EffectStartEventHandler&&) = delete;
 	};
-
-
-
 }

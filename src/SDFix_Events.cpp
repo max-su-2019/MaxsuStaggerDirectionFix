@@ -1,6 +1,5 @@
 #include "SDFix_Events.h"
 
-
 namespace SDFix
 {
 	bool EffectStartEventHandler::RegisterEffectStartEvent()
@@ -20,7 +19,6 @@ namespace SDFix
 
 		return true;
 	}
-
 
 	EventResult EffectStartEventHandler::ProcessEvent(const RE::TESMagicEffectApplyEvent* a_event, RE::BSTEventSource<RE::TESMagicEffectApplyEvent>* a_eventSource)
 	{
@@ -44,7 +42,6 @@ namespace SDFix
 		}
 		//-------------------------------------------------------------------------------------
 
-
 		//----------------------Check Hit Target-----------------------------------------------
 
 		auto hit_target = a_event->target.get();
@@ -59,7 +56,6 @@ namespace SDFix
 			return EventResult::kContinue;
 		}
 
-
 		if (hit_target->formType != RE::FormType::ActorCharacter) {
 			logger::debug("Hit Target Not Actor!");
 			return EventResult::kContinue;
@@ -70,14 +66,18 @@ namespace SDFix
 			return EventResult::kContinue;
 		}
 
+		RE::BSTSmartPointer<RE::BSAnimationGraphManager> animationGraphManagerPtr;
+		if (hit_target->GetAnimationGraphManager(animationGraphManagerPtr)) {
+			RE::BShkbAnimationGraph* animationGraph = animationGraphManagerPtr->graphs[animationGraphManagerPtr->GetRuntimeData().activeGraph].get();
 
-		if (!hit_target->HasGraphVariableFloat("staggerDirection")) {
-			logger::debug("Hit Target Has Not staggerDirection!");
-			return EventResult::kContinue;
+			float out;
+			if (!animationGraph->GetGraphVariableFloat("staggerDirection", out)) {
+				logger::debug("Hit Target Has No staggerDirection!");
+				return EventResult::kContinue;
+			}
 		}
 
 		//-------------------------------------------------------------------------------------
-
 
 		//----------------------Check Magic Effect-----------------------------------------------
 
@@ -90,8 +90,8 @@ namespace SDFix
 
 		if (this_effect->GetArchetype() == RE::EffectArchetypes::ArchetypeID::kStagger) {
 			logger::debug("Effect Is Stagger!");
-			logger::debug(FMT_STRING("Caster Name is \"{}\", ID is \"{:x}\""), hit_causer->GetName(), hit_causer->GetFormID());
-			logger::debug(FMT_STRING("Hit Target Name is \"{}\", ID is \"{:x}\""), hit_target->GetName(), hit_target->GetFormID());
+			logger::debug("Caster Name is \"{}\", ID is \"{:x}\"", hit_causer->GetName(), hit_causer->GetFormID());
+			logger::debug("Hit Target Name is \"{}\", ID is \"{:x}\"", hit_target->GetName(), hit_target->GetFormID());
 
 			static const std::string ModifiedDireName = "Maxsu_modifiedStaggerDirection";
 
@@ -112,8 +112,4 @@ namespace SDFix
 
 		return EventResult::kContinue;
 	}
-
-
-
-
 }
